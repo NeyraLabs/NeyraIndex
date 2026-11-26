@@ -3,7 +3,7 @@ import os
 import time
 from typing import Any, Optional, Union
 
-from .client import PageIndexClient, _cloud_client
+from .client import PageIndexClient, _cloud_client, _pageindex_alias
 from .errors import PageIndexAPIError
 
 COLLECTION = "Page Extract"
@@ -20,7 +20,7 @@ class PageExtractClient:
     A PDF given by its path is uploaded to the "Page Extract" collection,
     with no outline index built. The documents are the ones
     ``PageIndexClient`` and ``PageSearchClient`` see with the same key;
-    ``client.pageindex`` is that ``PageIndexClient``, for listing and
+    ``client.documents`` is that ``PageIndexClient``, for listing and
     deleting them.
 
     Args:
@@ -33,9 +33,11 @@ class PageExtractClient:
 
     def __init__(self, api_key: Optional[str] = None, *,
                  client: Optional[PageIndexClient] = None):
-        self.pageindex = _cloud_client(api_key, client, "PageExtractClient",
+        self.documents = _cloud_client(api_key, client, "PageExtractClient",
                                        "PAGEINDEX_EXTRACT_API_KEY")
         self._collections: dict[str, str] = {}
+
+    pageindex = _pageindex_alias("PageExtractClient")
 
     def extract(
         self,
@@ -72,7 +74,8 @@ class PageExtractClient:
                 ``wait=False`` raises PageIndexAPIError (HTTP 409).
             schema (dict | type): A JSON Schema whose top is an object or an
                 array, or a Pydantic model class.
-            tier (str): "standard" (default) or "pro".
+            tier (str): "standard" (default, $0.03 a page), "pro" ($0.05)
+                or "max" ($0.10, the most accurate).
             pages (str | int | tuple, optional): Extract from these pages
                 only: "3-9", (3, 9) or 3. The extraction is charged for them
                 alone.
@@ -102,7 +105,7 @@ class PageExtractClient:
             as ``{"/rows/0": {"page": 3}}``) and 'usage' ({'pages',
             'credits'}); failed, 'error_message'.
         """
-        api = self.pageindex._api
+        api = self.documents._api
         if isinstance(schema, dict):
             data_schema = schema
         elif hasattr(schema, "model_json_schema"):
@@ -130,7 +133,7 @@ class PageExtractClient:
                 # No job started: the file is stored already and not ready, or
                 # the server is older than extraction on upload.
                 try:
-                    self.pageindex._wait_until_ready(
+                    self.documents._wait_until_ready(
                         stored["doc_id"], deadline - time.monotonic())
                     break
                 except PageIndexAPIError as exc:
@@ -138,7 +141,7 @@ class PageExtractClient:
                     # it, or it was deleted: the file is uploaded again.
                     if last or not (
                             exc.status_code == 404
-                            or self.pageindex.get_document(
+                            or self.documents.get_document(
                                 stored["doc_id"]).get("status") == "failed"):
                         raise
             document = stored["doc_id"]
@@ -149,14 +152,14 @@ class PageExtractClient:
         except PageIndexAPIError as exc:
             if not wait or exc.status_code != 409:
                 raise
-            self.pageindex._wait_until_ready(document, deadline - time.monotonic())
+            self.documents._wait_until_ready(document, deadline - time.monotonic())
             job = api.create_extract(configuration, doc_id=document)
         return self._done(job, deadline, timeout) if wait else job
 
     def _store(self, file_path: str, collection: Optional[str],
                configuration: dict) -> dict:
         def upload():
-            return self.pageindex._upload(
+            return self.documents._upload(
                 file_path, False, collection_id=self._collection(collection),
                 index=False, extract=configuration)
 
@@ -171,7 +174,7 @@ class PageExtractClient:
     def _collection(self, collection: Optional[str]) -> Optional[str]:
         if collection is None or collection in self._collections:
             return self._collections.get(collection)
-        api = self.pageindex._api
+        api = self.documents._api
 
         name = collection.strip().casefold()
 
@@ -198,7 +201,7 @@ class PageExtractClient:
 
     def _done(self, job: dict, deadline: float, timeout: float) -> dict:
         import requests
-        api = self.pageindex._api
+        api = self.documents._api
         while job["status"] in ("pending", "running"):
             if time.monotonic() > deadline:
                 raise PageIndexAPIError(
@@ -230,7 +233,7 @@ class PageExtractClient:
         running).
         """
         return self._done(
-            self.pageindex._api.get_extract(job_id),
+            self.documents._api.get_extract(job_id),
             time.monotonic() + timeout, timeout)
 
     def get_extract(self, job_id: str) -> dict[str, Any]:
@@ -238,7 +241,7 @@ class PageExtractClient:
         Get an extract job, with its result once it is completed: the dict
         ``extract()`` returns.
         """
-        return self.pageindex._api.get_extract(job_id=job_id)
+        return self.documents._api.get_extract(job_id=job_id)
 
     def list_extracts(self, limit: int = 20,
                       after: Optional[str] = None) -> dict[str, Any]:
@@ -254,7 +257,7 @@ class PageExtractClient:
             dict: {'jobs': [...], 'next'}; 'next' is the id to pass as
             ``after``, or None on the last page.
         """
-        return self.pageindex._api.list_extracts(limit=limit, after=after)
+        return self.documents._api.list_extracts(limit=limit, after=after)
 
     def cancel_extract(self, job_id: str) -> dict[str, Any]:
         """
@@ -266,7 +269,7 @@ class PageExtractClient:
         Returns:
             dict: The job, cancelled.
         """
-        return self.pageindex._api.cancel_extract(job_id=job_id)
+        return self.documents._api.cancel_extract(job_id=job_id)
 
     def delete_extract(self, job_id: str) -> dict[str, Any]:
         """
@@ -276,4 +279,4 @@ class PageExtractClient:
         Returns:
             dict: {'id', 'deleted': True}.
         """
-        return self.pageindex._api.delete_extract(job_id=job_id)
+        return self.documents._api.delete_extract(job_id=job_id)
