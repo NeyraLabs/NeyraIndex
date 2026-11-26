@@ -1,17 +1,8 @@
-<div align="center">
-  
-<a href="https://vectify.ai/pageindex" target="_blank">
-<img width="1471" alt="pi_github_banner_low" src="https://github.com/user-attachments/assets/bae02956-6c4e-4a0b-adea-257b0be4aaa1" />
-</a>
 
-<br/>
-<br/>
 
-<p align="center">
-  <a href="https://trendshift.io/repositories/14736" target="_blank"><img src="https://trendshift.io/api/badge/repositories/14736" alt="VectifyAI%2FPageIndex | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
-</p>
 
-# PageIndex: Vectorless, Reasoning-based RAG
+
+# NeyraIndex: Vectorless, Reasoning-based RAG for films
 
 <p align="center"><b>Reasoning-based RAG&nbsp; ◦ &nbsp;No Vector DB, No Chunking&nbsp; ◦ &nbsp;Context-Aware Retrieval&nbsp; ◦ &nbsp;Reads Like a Human</b></p>
 
@@ -568,43 +559,8 @@ PageIndex reached a state-of-the-art [**98.7% accuracy**](https://vectify.ai/blo
 Explore the full FinanceBench [evaluation results](https://github.com/VectifyAI/Mafin2.5-FinanceBench) and the [blog post](https://vectify.ai/blog/Mafin2.5).
 
 
----
-
-# ⭐ Support Us
-
-Leave us a star 🌟 if you like our project. Thank you!  
-
-<p>
-  <img src="https://github.com/user-attachments/assets/eae4ff38-48ae-4a7c-b19f-eab81201d794" width="80%">
-</p>
-
-Please cite this work as:
-```
-Mingtian Zhang, Yu Tang and PageIndex Team,
-"PageIndex: Next-Generation Vectorless, Reasoning-based RAG",
-PageIndex Blog, Sep 2025.
-```
-
-<details>
-<summary>Or use the BibTeX citation.</summary>
-
-```bibtex
-@article{zhang2025pageindex,
-  author = {Mingtian Zhang and Yu Tang and PageIndex Team},
-  title = {PageIndex: Next-Generation Vectorless, Reasoning-based RAG},
-  journal = {PageIndex Blog},
-  year = {2025},
-  month = {September},
-  note = {https://pageindex.ai/blog/pageindex-intro},
-}
-```
-</details>
 
 
 
 
----
 
-© 2026 [PageIndex AI](https://pageindex.ai)
-
-<img width="288" height="80" alt="pageindex-wordmark-animated-288-warm" src="https://github.com/user-attachments/assets/e1c677f2-b590-4ffc-859d-e8cc7d794bdf" />
