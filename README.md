@@ -4,15 +4,8 @@
 
 # NeyraIndex: Vectorless, Reasoning-based RAG for films
 
-<p align="center"><b>Reasoning-based RAG&nbsp; ◦ &nbsp;No Vector DB, No Chunking&nbsp; ◦ &nbsp;Context-Aware Retrieval&nbsp; ◦ &nbsp;Reads Like a Human</b></p>
+<p align="center"><b>Reasoning-based RAG&nbsp; ◦ &nbsp;No Vector DB, No Chunking&nbsp; ◦ &nbsp;Context-Aware Retrieval&nbsp; ◦ &nbsp;Reads Like a Director</b></p>
 
-<h4 align="center">
-  <a href="https://pageindex.ai/developer">🌐 Website</a>&nbsp; • &nbsp;
-  <a href="https://developer.pageindex.ai/">☁️ Cloud</a>&nbsp; • &nbsp;
-  <a href="https://docs.pageindex.ai">📖 Docs</a>&nbsp; • &nbsp;
-  <a href="https://pageindex.ai/blog">📝 Blog</a>&nbsp; • &nbsp;
-  <a href="https://pageindex.ai/contact">✉️ Contact</a>&nbsp;
-</h4>
   
 </div>
 
